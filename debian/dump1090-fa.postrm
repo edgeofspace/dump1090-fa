@@ -26,24 +26,21 @@ case "$1" in
 
     remove)
         changed=false
-        if [ -e /etc/lighttpd/conf-enabled/89-dump1090-fa.conf ]
-        then
-            echo "Disabling lighttpd integration.." >&2
-            lighty-disable-mod dump1090-fa || true
-            changed=true
-        fi
 
-        if [ -e /etc/lighttpd/conf-enabled/88-dump1090-fa-statcache.conf ]
-        then
-            echo "Disabling lighttpd integration (stat cache).." >&2
-            lighty-disable-mod dump1090-fa-statcache || true
-            changed=true
-        fi
+        for apachefile in /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/default-ssl.conf
+        do
+            if [ -f ${apachefile} ]; then
+                echo "Modifying apache file ${apachefile}..." >&2
+                sed -i '/^[ \t]*#*dump1090-start#*/,/^[ \t]*#*dump1090-end#*/{/^[ \t]*#*dump1090-start#*/!{/^[ \t]*#*dump1090-end#*/!d}}' ${apachefile}
+                sed -i '/[ \t]*#*dump1090-start#*/,/^[ \t]*#*dump1090-end#*/d' ${apachefile}
+                changed=true
+            fi
+        done
 
         if $changed
         then
-            echo "Restarting lighttpd.." >&2
-            invoke-rc.d lighttpd restart || echo "Warning: lighttpd failed to restart." >&2
+            echo "Restarting Apache..." >&2
+            invoke-rc.d apache2 restart || echo "Warning: apache2 failed to restart." >&2
         fi
         ;;
 
