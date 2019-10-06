@@ -11,11 +11,11 @@ Build-Depends: debhelper(>=9),
   pkg-config, dh-systemd, libncurses5-dev
 Standards-Version: 3.9.3
 Homepage: http://www.flightaware.com/
-Vcs-Git: https://github.com/flightaware/dump1090.git
+Vcs-Git: https://github.com/edgeofspace/dump1090-fa.git
 
 Package: dump1090-fa
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, adduser, lighttpd
+Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
 Description: FlightAware ADS-B Ground Station System for SDRs
  Networked Aviation Mode S / ADS-B decoder/translator with support
  for RTL-SDR, BladeRF, HackRF, and LimeSDR software defined radio USB

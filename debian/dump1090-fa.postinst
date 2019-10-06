@@ -34,20 +34,39 @@ case "$1" in
         # plugdev required for bladeRF USB access
         adduser "$RUNAS" plugdev
 
-        # set up lighttpd
-        if dpkg --compare-versions "$2" lt "3.1.0"
-        then
-            echo "Enabling lighttpd integration.." >&2
-            lighty-enable-mod dump1090-fa || true
-
-            # only enable the statcache config if there is nothing else around that already
-            # configures it, because lighttpd fails if it's configured twice
-            if ! grep -q -E '^\S*server.stat-cache-engine' /etc/lighttpd/conf-enabled/*.conf
-            then
-                echo "Enabling lighttpd integration (stat cache).." >&2
-                lighty-enable-mod dump1090-fa-statcache || true
-            fi
+        # Make sure the "data" directory is owned by dump1090 so the dump1090-fa process has write access
+        jsondir="/usr/share/dump1090-fa/html/data"
+        if [ -d ${jsondir} ]; then
+            echo "Changing permissions on ${jsondir}..." >&2
+            chown ${RUNAS}:nogroup ${jsondir}
+            chmod 755 ${jsondir}
         fi
+
+        # Update apache
+        changed=false
+        for apachefile in /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/default-ssl.conf
+        do
+            if [ -f ${apachefile} ]; then
+                echo "Modifying ${apachefile}..." >&2
+                sed -i '/<\/VirtualHost>/i \
+        ####dump1090-start###\
+        Alias  "/data" "/dump1090-fa/data"\
+        Alias  "/dump1090-fa" "/usr/share/dump1090-fa/html"\
+        Alias  "^/dump1090-fa$" "/dump1090-fa"\
+        SetEnvIf Request_URI "/dump1090-fa/data/.*\.json$" Header set "Access-Control-Allow-Origin" "*"\
+        ####dump1090-end###' ${apachefile}
+                changed=true
+            fi
+        done
+
+        # Restart apache
+        if $changed
+        then
+            echo "Restarting Apache..." >&2
+            invoke-rc.d apache2 restart || echo "Warning: apache2 failed to restart." >&2
+        fi
+
+
 
         # on upgrade, add an ENABLED line if it's not already present
         if dpkg --compare-versions "$2" lt-nl "3.7.0"
@@ -63,15 +82,6 @@ case "$1" in
             fi
         fi
 
-        if dpkg --compare-versions "$2" le "5.0"
-        then
-            echo "Enabling lighttpd skyaware module.." >&2
-            lighty-enable-mod skyaware || true
-
-        fi
-
-        echo "Restarting lighttpd.." >&2
-        invoke-rc.d lighttpd restart || true
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

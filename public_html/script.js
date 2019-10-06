@@ -1907,7 +1907,7 @@ function isPointInsideExtent(x, y, extent) {
 function initializeUnitsSelector() {
     // Get display unit preferences from local storage
     if (!localStorage.getItem('displayUnits')) {
-        localStorage['displayUnits'] = "nautical";
+        localStorage['displayUnits'] = "imperial";
     }
     var displayUnits = localStorage['displayUnits'];
     DisplayUnits = displayUnits;
