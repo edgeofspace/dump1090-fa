@@ -23,8 +23,9 @@ DisplayUnits = "nautical";
 // degrees.
 
 // Default center of the map.
-DefaultCenterLat = 45.0;
-DefaultCenterLon = 9.0;
+// 39.234 | -103.697 - Limon, CO
+DefaultCenterLat = 39.234;
+DefaultCenterLon = -103.697;
 // The google maps zoom level, 0 - 16, lower is further out
 DefaultZoomLvl   = 7;
 
