@@ -82,12 +82,6 @@ case "$1" in
             fi
         fi
 
-        # Enable and start dump1090-fa
-        echo "Enabling the dump1090-fa service..." >&2
-        systemctl enable dump1090-fa
-        echo "Starting the dump1090-fa service..." >&2
-        systemctl start dump1090-fa
-
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
