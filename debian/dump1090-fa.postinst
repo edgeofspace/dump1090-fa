@@ -36,6 +36,10 @@ case "$1" in
 
         # Make sure the "data" directory is owned by dump1090 so the dump1090-fa process has write access
         jsondir="/usr/share/dump1090-fa/html/data"
+        if [ ! -d ${jsondir} ]; then
+            echo "Creating directory ${jsondir}..." >&2
+            mkdir ${jsondir}
+        fi
         if [ -d ${jsondir} ]; then
             echo "Changing permissions on ${jsondir}..." >&2
             chown ${RUNAS}:nogroup ${jsondir}
@@ -89,7 +93,6 @@ case "$1" in
         systemctl enable dump1090-fa
         echo "Starting the dump1090-fa service..." >&2
         systemctl restart dump1090-fa
-
 
     ;;
 
