@@ -1,3 +1,12 @@
+# EOSS Specific Changes
+
+The `eoss` branch adds the following changes/features so that the dump1090-fa release can work relatively seamlessly on the EOSS SDR system:
+- Updates to the web display and the underlying Javascript to Redirect the map source to the locally running OSM map server.  This way map tiles are fetched from the local system and removes the need for a dedicated Internet connection.
+- Apache is used as the web server of choice instead of lighttpd.  The Apache configuration is modified to use an alias (/dump1090-fa) pointing to the /user/share/dump1090-fa/html directory.
+- Parameter changes for the dump1090-fa daemon so that it looks to use only those RTL-SDR USB dongles that have been labeled with "ADSB" as their serial number.  This allows 
+multiple RTL-SDR dongles to be used on the SDR system (dump1090-fa uses one while the SDR system can use another).
+
+
 # dump1090-fa Debian/Raspbian packages
 
 dump1090-fa is a ADS-B, Mode S, and Mode 3A/3C demodulator and decoder that

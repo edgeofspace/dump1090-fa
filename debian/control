@@ -13,6 +13,16 @@ Standards-Version: 3.9.3
 Homepage: http://www.flightaware.com/
 Vcs-Git: https://github.com/edgeofspace/dump1090-fa.git
 
+Package: dump1090
+Architecture: all
+Depends: dump1090-fa, ${misc:Depends}
+Priority: extra
+Section: oldlibs
+Description: transitional dummy package for dump1090
+  This is a transitional dummy package to handle upgrades from
+  the old package name of "dump1090" to the new package name of
+  "dump1090-fa". It can safely be removed.
+
 Package: dump1090-fa
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, adduser
