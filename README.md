@@ -6,6 +6,9 @@ The `eoss` branch adds the following changes/features so that the dump1090-fa re
 - Parameter changes for the dump1090-fa daemon so that it looks to use only those RTL-SDR USB dongles that have been labeled with "ADSB" as their serial number.  This allows 
 multiple RTL-SDR dongles to be used on the SDR system (dump1090-fa uses one while the SDR system can use another).
 
+For detailed instructions and build info for the `eoss` branch, please see the [EOSS-Install-dump1090](https://github.com/TheKoola/eosstracker/blob/master/doc/EOSS-Install-dump1090.md) under the eosstracker project.
+
+
 
 # dump1090-fa Debian/Raspbian packages
 
